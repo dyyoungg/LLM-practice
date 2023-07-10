@@ -1,0 +1,4 @@
+3D Visual Manipulation Relationship Dataset
+Motivation
+Manipulation relationship detection, object attributes, and captions are important for robot intelligence.
+VMRD only contains RGB images, limiting its performance in real scenes.

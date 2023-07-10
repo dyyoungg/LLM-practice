@@ -1,6 +1,6 @@
 import requests
 import json
-from tools import Tokennizer
+from tool import Tokennizer
 
 class OpenAI_Request(object):
 
