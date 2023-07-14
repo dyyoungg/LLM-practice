@@ -12,8 +12,11 @@ from llama_index.node_parser.extractors import (
 from llama_index.node_parser import SimpleNodeParser
 import os
 import openai
-os.environ['OPENAI_API_KEY'] = "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"
+
+service_context = ServiceContext.from_defaults(chunk_size=1000)
+# os.environ['OPENAI_API_KEY'] = "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"
 openai.api_key = "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"
+# openai.api_key = "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"
 
 file_paths = ['./data/text1.txt', './data/text2.txt']
 documents = SimpleDirectoryReader(input_files=file_paths).load_data()
@@ -28,11 +31,13 @@ metadata_extractor = MetadataExtractor(
 )
 
 parser = SimpleNodeParser.from_defaults(
-    chunk_size=1024,
+    chunk_size=512,
     include_prev_next_rel=False,
     metadata_extractor=metadata_extractor,
 )
-nodes = parser.get_nodes_from_documents(documents)
-print('nodes', len(nodes))
-index = VectorStoreIndex(nodes)
-print('index', index)
+
+service_context = ServiceContext.from_defaults(node_parser=parser)
+index = VectorStoreIndex.from_documents(documents, service_context=service_context)
+query_engine = index.as_query_engine()
+response = query_engine.query("What did the author do growing up?")
+print(response)
